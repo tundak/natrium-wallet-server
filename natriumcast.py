@@ -27,7 +27,7 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 # Configuration arguments
 
-parser = argparse.ArgumentParser(description="Natrium/Kalium Wallet Server")
+parser = argparse.ArgumentParser(description="BCB Wallet Server")
 parser.add_argument('-b', '--banano', action='store_true', help='Run for BANANO (Kalium-mode)', default=False)
 parser.add_argument('--host', type=str, help='Host to listen on (e.g. 127.0.0.1)', default='127.0.0.1')
 parser.add_argument('--path', type=str, help='(Optional) Path to run application on (for unix socket, e.g. /tmp/natriumapp.sock', default=None)
