@@ -33,7 +33,7 @@ sudo adduser blackuser # Add blackuser
 sudo usermod -aG sudo blackuser # Add blackuser to sudo group
 sudo usermod -aG www-data blackuser # Add blackuser to www-data group
 sudo su - blackuser # Change to blackuser
-git clone https://github.com/tundak/kalium_wallet_flutter.git balckcast # Clone repository
+git clone https://github.com/tundak/natrium-wallet-server.git balckcast # Clone repository
 ```
 
 Ensure python3.6 or newer is installed (`python3 --version`) and
