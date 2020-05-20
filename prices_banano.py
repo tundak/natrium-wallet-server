@@ -15,6 +15,7 @@ currency_list = ["ARS", "AUD", "BRL", "BTC", "CAD", "CHF", "CLP", "CNY", "CZK", 
 
 #coingecko_url = 'https://api.coingecko.com/api/v3/coins/banano?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=false'
 coingecko_url = 'http://api.currencylayer.com/live?access_key=';
+#coingecko_url = 'http://localhost/test/curlayer.json';
 
 def coingecko():
     response = requests.get(url=coingecko_url).json()
@@ -22,10 +23,16 @@ def coingecko():
         return
     for currency in currency_list:
         try:
-            data_name = 'USD'.currency.upper()
+            data_name = 'USD'+currency.upper()
             data_name2 = currency.lower()
-            price_currency = float(
-                response['quotes'][data_name])
+            #1 BCB price is 0.01 USD (USD value calculated based on IEO price)
+            #1USD == 100BCB coins
+            if(data_name == 'USDUSD'):
+                price_currency = float(0.01)
+            else:
+                price_currency = float(response['quotes'][data_name])
+                price_currency = price_currency*0.01
+
             print(rdata.hset("prices", "coingecko:banano-"+data_name2,
                              f"{price_currency:.16f}"), "Coingecko BANANO-"+currency, f"{price_currency:.16f}")
         except Exception:
