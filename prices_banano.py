@@ -13,24 +13,25 @@ rdata = redis.StrictRedis(host=os.getenv('REDIS_HOST', 'localhost'), port=6379, 
 currency_list = ["ARS", "AUD", "BRL", "BTC", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "IDR", "ILS", "INR",
                  "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PKR", "PLN", "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "USD", "ZAR", "SAR", "AED", "KWD"]
 
-coingecko_url = 'https://api.coingecko.com/api/v3/coins/banano?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=false'
-
+#coingecko_url = 'https://api.coingecko.com/api/v3/coins/banano?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=false'
+coingecko_url = 'http://api.currencylayer.com/live?access_key=';
 
 def coingecko():
     response = requests.get(url=coingecko_url).json()
-    if 'market_data' not in response:
+    if 'quotes' not in response:
         return
     for currency in currency_list:
         try:
-            data_name = currency.lower()
+            data_name = 'USD'.currency.upper()
+            data_name2 = currency.lower()
             price_currency = float(
-                response['market_data']['current_price'][data_name])
-            print(rdata.hset("prices", "coingecko:banano-"+data_name,
+                response['quotes'][data_name])
+            print(rdata.hset("prices", "coingecko:banano-"+data_name2,
                              f"{price_currency:.16f}"), "Coingecko BANANO-"+currency, f"{price_currency:.16f}")
         except Exception:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             print('exception', exc_type, exc_obj, exc_tb.tb_lineno)
-            print("Failed to get price for BANANO-"+currency.upper()+" Error")
+            print("Failed to get price for BCB-"+currency.upper()+" Error")
     # Convert to VES
     usdprice = float(rdata.hget(
         "prices", "coingecko:banano-usd").decode('utf-8'))

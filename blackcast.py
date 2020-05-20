@@ -51,7 +51,7 @@ try:
         server_desc = f'on {app_path}'
     if options.banano:
         banano_mode = True
-        print(f'Starting KALIUM Server (BANANO) {server_desc}')
+        print(f'Starting BitcoinBlack Server (BCB) {server_desc}')
     else:
         banano_mode = False
         print(f'Starting NATRIUM Server (NANO) {server_desc}')
@@ -63,7 +63,7 @@ price_prefix = 'coingecko:nano' if not banano_mode else 'coingecko:banano'
 
 # Environment configuration
 
-rpc_url = os.getenv('RPC_URL', 'http://[::1]:7076')
+rpc_url = os.getenv('RPC_URL', 'http://[::1]:9076')
 work_url = os.getenv('WORK_URL', None)
 fcm_api_key = os.getenv('FCM_API_KEY', None)
 fcm_sender_id = os.getenv('FCM_SENDER_ID', None)
@@ -414,7 +414,6 @@ async def handle_user_message(r : web.Request, message : str, ws : web.WebSocket
 
 async def websocket_handler(r : web.Request):
     """Handler for websocket connections and messages"""
-
     ws = web.WebSocketResponse()
     await ws.prepare(r)
 
@@ -481,7 +480,7 @@ async def callback_ws(app: web.Application, data: dict):
                     data['is_send'] = 'true'
                     await app['clients'][sub].send_str(json.dumps(data))
     # Send to natrium donations page
-    if data['block']['subtype'] == 'send' and link == 'nano_1natrium1o3z5519ifou7xii8crpxpk8y65qmkih8e8bpsjri651oza8imdd':
+    if data['block']['subtype'] == 'send' and link == 'bcb_1t4fnppzaoa56t67wbxj99n68pnednh6x53158fxej63xdwj849g78c7nuc5':
         log.server_logger.info('Detected send to natrium account')
         if 'amount' in data:
             log.server_logger.info(f'emitting donation event for amount: {data["amount"]}')
@@ -532,8 +531,8 @@ async def callback(r : web.Request):
                             priority=aiofcm.PRIORITY_HIGH
                 )
                 await fcm.send_message(message)
-            notification_title = f"Received {util.raw_to_nano(send_amount)} {'NANO' if not banano_mode else 'BANANO'}"
-            notification_body = f"Open {'Natrium' if not banano_mode else 'Kalium'} to view this transaction."
+            notification_title = f"Received {util.raw_to_nano(send_amount)} {'NANO' if not banano_mode else 'BCB'}"
+            notification_body = f"Open {'Natrium' if not banano_mode else 'BitcoinBlack'} to view this transaction."
             for t2 in fcm_tokens_v2:
                 message = aiofcm.Message(
                     device_token = t2,

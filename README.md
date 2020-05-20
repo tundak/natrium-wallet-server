@@ -33,7 +33,7 @@ sudo adduser blackuser # Add blackuser
 sudo usermod -aG sudo blackuser # Add blackuser to sudo group
 sudo usermod -aG www-data blackuser # Add blackuser to www-data group
 sudo su - blackuser # Change to blackuser
-git clone https://github.com/tundak/natrium-wallet-server.git balckcast # Clone repository
+git clone https://github.com/tundak/bitcoinblack-wallet-server.git balckcast # Clone repository
 ```
 
 Ensure python3.6 or newer is installed (`python3 --version`) and
@@ -48,7 +48,7 @@ pip install -r requirements.txt
 
 You must configure using environment variables. You may do this manually, as part of a launching script, in your bash settings, or within a systemd service.
 
-Create the file `.env` in the same directory as `natriumcast.py` with the contents:
+Create the file `.env` in the same directory as `blackcast.py` with the contents:
 
 ```
 RPC_URL=http://[::1]:9076 # NANO/BANANO node RPC URL
@@ -75,7 +75,7 @@ User=blackuser
 Group=www-data
 EnvironmentFile=/home/blackuser/balckcast/.env
 WorkingDirectory=/home/blackuser/balckcast
-ExecStart=/home/blackuser/balckcast/venv/bin/python natriumcast.py -b -ws ws://localhost:37000 --host 127.0.0.1 --port %i --log-file /tmp/balckcast%i.log
+ExecStart=/home/blackuser/balckcast/venv/bin/python blackcast.py -b -ws ws://localhost:37000 --host 127.0.0.1 --port %i --log-file /tmp/balckcast%i.log
 Restart=on-failure
 
 [Install]
@@ -92,7 +92,7 @@ sudo systemctl status balckcast@5076
 
 Next, configure nginx to proxy requests to this server
 
-/etc/nginx/sites-available/app.natrium.io
+/etc/nginx/sites-available/app.bitcoinblack.info
 
 ```
 upstream black_nodes {
@@ -102,7 +102,7 @@ upstream black_nodes {
 }
 
 server {
-        server_name wsbeta.bitcoinblack.info;
+        server_name app.bitcoinblack.info;
 
         location / {
                 proxy_pass http://black_nodes;
@@ -123,7 +123,7 @@ server {
 Enable this configuration and restart nginx
 
 ```
-sudo ln -s /etc/nginx/sites-available/wsbeta.bitcoinblack.info /etc/nginx/sites-enabled/wsbeta.bitcoinblack.info
+sudo ln -s /etc/nginx/sites-available/app.bitcoinblack.info /etc/nginx/sites-enabled/app.bitcoinblack.info
 sudo service nginx restart
 ```
 
