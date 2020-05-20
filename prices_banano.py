@@ -13,12 +13,13 @@ rdata = redis.StrictRedis(host=os.getenv('REDIS_HOST', 'localhost'), port=6379, 
 currency_list = ["ARS", "AUD", "BRL", "BTC", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "IDR", "ILS", "INR",
                  "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PKR", "PLN", "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "USD", "ZAR", "SAR", "AED", "KWD"]
 
-#coingecko_url = 'https://api.coingecko.com/api/v3/coins/banano?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=false'
+coingecko_url2 = 'https://api.coingecko.com/api/v3/coins/nano?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=false'
 coingecko_url = 'http://api.currencylayer.com/live?access_key=';
 #coingecko_url = 'http://localhost/test/curlayer.json';
 
 def coingecko():
     response = requests.get(url=coingecko_url).json()
+    response2 = requests.get(url=coingecko_url2).json()
     if 'quotes' not in response:
         return
     for currency in currency_list:
@@ -50,10 +51,12 @@ def coingecko():
                                              "coingecko:banano-ves").decode('utf-8'))
     # Convert to NANO
     xrb_prices = []
-    for t in response['tickers']:
-        if t['target'] == 'XRB':
+    for t in response2['tickers']:
+        if t['target'] == 'USD':
             xrb_prices.append(float(t['last']))
     nanoprice = sum(xrb_prices) / len(xrb_prices)
+    #in 1 nano price bcb
+    nanoprice = nanoprice*100
     rdata.hset("prices", "coingecko:banano-nano", f"{nanoprice:.16f}")
     print(rdata.hset("prices", "coingecko:lastupdate",
                      int(time.time())), int(time.time()))
