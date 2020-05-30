@@ -75,7 +75,7 @@ User=blackuser
 Group=www-data
 EnvironmentFile=/home/blackuser/balckcast/.env
 WorkingDirectory=/home/blackuser/balckcast
-ExecStart=/home/blackuser/balckcast/venv/bin/python blackcast.py -b -ws ws://localhost:37000 --host 127.0.0.1 --port %i --log-file /tmp/balckcast%i.log
+ExecStart=/home/blackuser/balckcast/venv/bin/python blackcast.py -b -ws ws://localhost:9078 --host 127.0.0.1 --port %i --log-file /tmp/balckcast%i.log
 Restart=on-failure
 
 [Install]
