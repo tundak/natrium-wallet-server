@@ -18,6 +18,7 @@ from logging.handlers import TimedRotatingFileHandler, WatchedFileHandler
 import aiofcm
 import aioredis
 from aiohttp import ClientSession, WSMessage, WSMsgType, log, web
+import aiohttp_cors
 
 from rpc import RPC, allowed_rpc_actions
 from util import Util
@@ -350,7 +351,11 @@ async def handle_user_message(r : web.Request, message : str, ws : web.WebSocket
                     subtype = None
                     if 'subtype' in request_json:
                         subtype = request_json['subtype']
-                    reply = await rpc.process_defer(r, uid, json.loads(request_json['block']), do_work, subtype=subtype)
+                    if 'json_block' in request_json and request_json['json_block']:
+                        sblock = request_json['block']
+                    else:
+                        sblock = json.loads(request_json['block'])
+                    reply = await rpc.process_defer(r, uid, sblock, do_work, subtype=subtype)
                     if reply is None:
                         raise Exception
                     ret = json.dumps(reply)
@@ -471,20 +476,21 @@ async def http_api(r: web.Request):
         return web.HTTPInternalServerError(reason=f"Something went wrong {str(sys.exc_info())}")
 
 async def callback_ws(app: web.Application, data: dict):
-    link = data['block']['link_as_account']
-    if app['subscriptions'].get(link):
-        log.server_logger.info("Pushing to clients %s", str(app['subscriptions'][link]))
-        for sub in app['subscriptions'][link]:
-            if sub in app['clients']:
-                if data['block']['subtype'] == 'send':
-                    data['is_send'] = 'true'
-                    await app['clients'][sub].send_str(json.dumps(data))
-    # Send to natrium donations page
-    if data['block']['subtype'] == 'send' and link == 'bcb_1t4fnppzaoa56t67wbxj99n68pnednh6x53158fxej63xdwj849g78c7nuc5':
-        log.server_logger.info('Detected send to natrium account')
-        if 'amount' in data:
-            log.server_logger.info(f'emitting donation event for amount: {data["amount"]}')
-            await sio.emit('donation_event', {'amount':data['amount']})
+    if 'block' in data and 'link_as_account' in data['block']:
+        link = data['block']['link_as_account']
+        if app['subscriptions'].get(link):
+            log.server_logger.info("Pushing to clients %s", str(app['subscriptions'][link]))
+            for sub in app['subscriptions'][link]:
+                if sub in app['clients']:
+                    if data['block']['subtype'] == 'send':
+                        data['is_send'] = 'true'
+                        await app['clients'][sub].send_str(json.dumps(data))
+        # Send to natrium donations page
+        if data['block']['subtype'] == 'send' and link == 'bcb_1t4fnppzaoa56t67wbxj99n68pnednh6x53158fxej63xdwj849g78c7nuc5':
+            log.server_logger.info('Detected send to natrium account')
+            if 'amount' in data:
+                log.server_logger.info(f'emitting donation event for amount: {data["amount"]}')
+                await sio.emit('donation_event', {'amount':data['amount']})
 
 async def callback(r : web.Request):
     try:
@@ -628,9 +634,18 @@ async def init_app():
             root.addHandler(TimedRotatingFileHandler(log_file, when="d", interval=1, backupCount=100))        
 
     app = web.Application()
+    cors = aiohttp_cors.setup(app, defaults={
+        "*": aiohttp_cors.ResourceOptions(
+                allow_credentials=True,
+                expose_headers="*",
+                allow_headers="*",
+            )
+    })    
     app.add_routes([web.get('/', websocket_handler)]) # All WS requests
     app.add_routes([web.post('/callback', callback)]) # HTTP Callback from node
-    app.add_routes([web.post('/api', http_api)])      # HTTP API
+    # HTTP API
+    users_resource = cors.add(app.router.add_resource("/api"))
+    cors.add(users_resource.add_route("POST", http_api))    
     #app.add_routes([web.post('/callback', callback)])
     app.on_startup.append(open_redis)
     app.on_shutdown.append(close_redis)
