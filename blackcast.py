@@ -29,7 +29,7 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 # Configuration arguments
 
 parser = argparse.ArgumentParser(description="BCB Wallet Server")
-parser.add_argument('-b', '--banano', action='store_true', help='Run for BANANO (Kalium-mode)', default=False)
+parser.add_argument('-b', '--banano', action='store_true', help='Run for BCB (BCB-mode)', default=False)
 parser.add_argument('--host', type=str, help='Host to listen on (e.g. 127.0.0.1)', default='127.0.0.1')
 parser.add_argument('--path', type=str, help='(Optional) Path to run application on (for unix socket, e.g. /tmp/natriumapp.sock', default=None)
 parser.add_argument('-p', '--port', type=int, help='Port to listen on', default=5076)
@@ -251,9 +251,9 @@ async def handle_user_message(r : web.Request, message : str, ws : web.WebSocket
                         else:
                             # Legacy connections
                             account = account_list[0]
-                        if account.replace("nano_", "xrb_") in account_list:
-                            account_list.remove(account.replace("nano_", "xrb_"))
-                            account = account.replace('xrb_', 'nano_')
+                        if account.replace("bcb_", "bcb_") in account_list:
+                            account_list.remove(account.replace("bcb_", "bcb_"))
+                            account = account.replace('bcb_', 'bcb_')
                             account_list.append(account)
                             await r.app['rdata'].hset(uid, "account", json.dumps(account_list))
                         await rpc.rpc_reconnect(ws, r, account)
@@ -278,7 +278,7 @@ async def handle_user_message(r : web.Request, message : str, ws : web.WebSocket
                             currency = request_json['currency']
                         else:
                             currency = 'usd'
-                        await rpc.rpc_subscribe(ws, r, request_json['account'].replace("nano_", "xrb_"), currency)
+                        await rpc.rpc_subscribe(ws, r, request_json['account'].replace("bcb_", "bcb_"), currency)
                         # Store FCM token if available, for push notifications
                         if 'fcm_token' in request_json:
                             await update_fcm_token_for_account(request_json['account'], request_json['fcm_token'], r)
