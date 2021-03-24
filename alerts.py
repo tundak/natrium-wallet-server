@@ -5,6 +5,14 @@ LOW_PRIORITY = "low"
 
 ACTIVE_ALERTS = [
     {
+        "id": 5,
+        "active": True,
+        "priority": LOW_PRIORITY,
+        "en": {
+            "title": "Just a title",
+        }
+    },
+    {
         "id": 4,
         "active": True,
         "priority": LOW_PRIORITY,
