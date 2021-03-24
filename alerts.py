@@ -44,19 +44,21 @@ ACTIVE_ALERTS = [
 
 
 def get_active_alert(lang: str):
+    ret = []
     for a in ACTIVE_ALERTS:
         active = a["active"]
         if active:
             if lang not in a:
                 lang = 'en'
-            return [{
+            retItem = {
                 "id": a["id"],
                 "priority": a["priority"],
                 "active":a["active"],
-                "title": a[lang]["title"],
-                "short_description": a[lang]["short_description"],
-                "long_description": a[lang]["long_description"],
-                "link": a[lang]["link"],
-                "timestamp": a["timestamp"]
-            }]
-    return []
+            }
+            if "timestamp" in a:
+                retItem["timestamp"] = a["timestamp"]
+            for k,v in a[lang].items():
+                retItem[k] = v
+            ret.append(retItem)
+
+    return ret
