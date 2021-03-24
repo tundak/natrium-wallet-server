@@ -9,7 +9,7 @@ ACTIVE_ALERTS = [
         "active": True,
         "priority": HIGH_PRIORITY,
         # yyyy, M,  D,  H,  M,  S, MS
-        "timestamp": int((datetime(2020, 3, 24, 1, 0, 0, 0, tzinfo=timezone.utc) - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds() * 1000),
+        "timestamp": int((datetime(2020, 3, 24, 0, 0, 0, 0, tzinfo=timezone.utc) - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds() * 1000),
         "link": "https://appditto.com/blog/natrium-status-and-state-of-the-nano-network",
         "en": {
             "title": "Network Issues",
