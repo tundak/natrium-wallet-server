@@ -27,7 +27,12 @@ ACTIVE_ALERTS = [
             "title": "Test message",
             "short_description": "Due to ongoing issues with the Nano network, your transactions may be delayed.",
             "link": "https://appditto.com/blog/natrium-status-and-state-of-the-nano-network",
-        }
+        },
+        "es": {
+            "title": "Spanish Test",
+            "short_description": "Due to ongoing issues with the Nano network, your transactions may be delayed.",
+            "link": "https://appditto.com/blog/natrium-status-and-state-of-the-nano-network",
+        },        
     },
     {
         "id": 5,
