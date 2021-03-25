@@ -61,7 +61,7 @@ ACTIVE_ALERTS = [
             "short_description": "Из-за текущих проблем с сетью Nano многие транзакции задерживаются.",
             "long_description": "В сети Nano возникают проблемы, вызванные продолжительным периодом спам-транзакций.\n\n Некоторые транзакции могут быть значительно задержаны, до нескольких дней. Мы будем держать наших пользователей в курсе новой информации, поскольку команда Nano  предоставляет его.\n\nВы можете узнать больше, нажав \"Подробнее\" ниже.\n\nВсе проблемы, связанные с задержками транзакций, вызваны проблемами сети Nano, а не Natrium. Мы не связаны с Nano Foundation его разработчики не могут ничего сделать для ускорения медленных  транзакций.\n\nМы благодарим вас за терпение в это время.",            
         },
-        "dk": {
+        "da": {
             "title": "Netværksproblemer",
             "short_description": "På grund af igangværende problemer med Nano-netværket er der mange forsinkede transaktioner.",
             "long_description": "Nano-netværket oplever problemer på grund af en lang og løbende periode med spamtransaktioner.\n\nNogle transaktioner kan tage lang tid, op til flere dage. Vi holder vores brugere opdateret med nye oplysninger, så snart Nano-teamet giver dem.\n\nDu kan læse mere ved at klikke \"Read More\" nedenfor.\n\nAlle problemer med hensyn til transaktionsforsinkelser skyldes problemer med Nano-netværket, ikke Natrium. Vi er ikke tilknyttet Nano Foundation eller dets udviklere og kan ikke gøre noget for at fremskynde langsomme transaktioner.\n\nVi sætter pris på din tålmodighed i denne periode.",            
