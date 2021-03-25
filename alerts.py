@@ -29,7 +29,7 @@ ACTIVE_ALERTS = [
         "tr": {
             "title": "Ağ Problemleri",
             "short_description": "Nano ağında devam eden spam problemi nedeniyle bir çok işlem gecikmekte.",
-            "long_description": "Nano ağı bir süredir devam eden spam nedeniyle problem yaşıyor.\n\nBazı işlemleriniz bir kaç gün süren gecikmelere maruz kalabilir. Nano takımının vereceği güncel haberleri size ileteceğiz.\n\nAşağıdaki \"Read More\" butonuna dokunarak daha detaylı bilgi alabilirsiniz.\n\nİşlem gecikmeleriyle alakalı bu problemler Natrium'dan değil, Nano ağının kendisinden kaynaklı. Nano Foundation veya geliştiricileriyle bir bağımız olmadığı için işlemlerinizi hızlandırabilmek için şu noktada yapabileceğimiz bir şey ne yazık ki yok.\n\nAnlayışınız ve sabrınız için teşekkür ederiz."            
+            "long_description": "Nano ağı bir süredir devam eden spam nedeniyle problem yaşıyor.\n\nBazı işlemleriniz bir kaç gün süren gecikmelere maruz kalabilir. Nano takımının vereceği güncel haberleri size ileteceğiz.\n\nAşağıdaki \"Detaylı Bilgi\" butonuna dokunarak daha detaylı bilgi alabilirsiniz.\n\nİşlem gecikmeleriyle alakalı bu problemler Natrium'dan değil, Nano ağının kendisinden kaynaklı. Nano Foundation veya geliştiricileriyle bir bağımız olmadığı için işlemlerinizi hızlandırabilmek için şu noktada yapabileceğimiz bir şey ne yazık ki yok.\n\nAnlayışınız ve sabrınız için teşekkür ederiz."            
         },
         "ja": {
             "title": "ネットワークエラー",
