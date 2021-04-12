@@ -26,7 +26,7 @@ spec:
         - containerPort: 5076
           name: api
         command: ["/bin/bash", "-c"]
-        args: ["python natriumcast.py --host 0.0.0.0 --log-to-stdout --websocket-url ws://banano-node.banano:7074 --banano"]
+        args: ["python natriumcast.py --host 0.0.0.0 --log-to-stdout --websocket-url ws://10.98.0.7:7074 --banano"]
         env:
           - name: REDIS_HOST
             value: redis-0.redis
@@ -37,7 +37,7 @@ spec:
           - name: DEBUG
             value: "0"
           - name: RPC_URL
-            value: http://banano-node.banano:7072
+            value: http://10.98.0.7:7072
           - name: FCM_API_KEY
             valueFrom:
               secretKeyRef:

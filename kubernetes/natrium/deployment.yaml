@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: natrium-server
-        image: replaceme
+        image: appditto/natrium-server:master-703234134
         resources:
           requests:
             cpu: 100m
