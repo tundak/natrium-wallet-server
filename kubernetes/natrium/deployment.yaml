@@ -15,30 +15,30 @@ spec:
     spec:
       containers:
       - name: natrium-server
-        image: replaceme
+        image: appditto/natrium-server:master-703234134
         resources:
           requests:
             cpu: 100m
-            memory: 200Mi
+            memory: 500Mi
           limits:
-            cpu: 500m
-            memory: 1Gi
+            cpu: 1000m
+            memory: 3Gi
         ports:
         - containerPort: 5076
           name: api
         command: ["/bin/bash", "-c"]
-        args: ["python blackcast.py --host 0.0.0.0 --log-to-stdout --websocket-url ws://nano-node.nano:9078"]
+        args: ["python blackcast.py --host 0.0.0.0 --log-to-stdout --websocket-url ws://10.98.0.6:9078"]
         env:
           - name: REDIS_HOST
             value: redis-0.redis
           - name: REDIS_DB
             value: "10"
           - name: WORK_URL
-            value: http://betsy-natrium.betsy:5555
+            value: http://pippin-nano.pippin:11338
           - name: DEBUG
             value: "0"
           - name: RPC_URL
-            value: http://nano-node.nano:9076
+            value: http://10.98.0.6:9076
           - name: FCM_API_KEY
             valueFrom:
               secretKeyRef:

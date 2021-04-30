@@ -13,7 +13,7 @@ allowed_rpc_actions = ["account_balance", "account_block_count", "account_check"
                        "blocks", "block_info", "blocks_info", "block_account", "block_count", "block_count_type",
                        "chain", "delegators", "delegators_count", "frontiers", "frontier_count", "history",
                        "key_expand", "process", "representatives", "republish", "peers", "version", "pending",
-                       "pending_exists", "price_data", "fcm_update"]
+                       "pending_exists", "price_data", "fcm_update", "active_difficulty"]
 
 class RPC:
     def __init__(self, node_url : str, banano_mode : bool, work_url : str = None, price_prefix : str = None):
@@ -41,7 +41,8 @@ class RPC:
             "action":"pending",
             "account":account,
             "threshold":str(10**24) if not self.banano_mode else str(10**27),
-            "count":51
+            "count":51,
+            "include_only_confirmed": True
         }
         log.server_logger.info('sending get_pending_count; %s; %s', self.util.get_request_ip(r), uid)
         response = await self.json_post(message)
@@ -249,13 +250,20 @@ class RPC:
                     workbase = self.util.pubkey(block['account'])
                 else:
                     workbase = block['previous']
-                difficulty = 'fffffe0000000000' if self.banano_mode else 'ffffffc000000000' if subtype == 'receive' else 'fffffff800000000'
-                work_response = await self.work_request({
-                    'action': 'work_generate',
-                    'hash': workbase,
-                    'difficulty': difficulty,
-                    'reward': False
-                })
+                if self.banano_mode:
+                    difficulty = 'fffffe0000000000'
+                    work_response = await self.work_request({
+                        'action': 'work_generate',
+                        'hash': workbase,
+                        'difficulty': difficulty,
+                        'reward': False
+                    })
+                else:
+                    work_response = await self.work_request({
+                        'action': 'work_generate',
+                        'hash': workbase,
+                        'subtype': subtype
+                    })                    
                 if work_response is None or 'work' not in work_response:
                     return {
                         'error':'failed work_generate in process request'
@@ -283,6 +291,8 @@ class RPC:
     # most valuable to least valuable. Finally, to save the client processing burden and give the server room to breathe,
     # we return only the top 10.
     async def pending_defer(self, r : web.Request, uid : str, request : dict) -> dict:
+        if 'include_only_confirmed' not in request:
+            request['include_only_confirmed'] = True
         response = await self.json_post(request)
 
         if response is None:
